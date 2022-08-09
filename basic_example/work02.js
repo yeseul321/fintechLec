@@ -45,7 +45,7 @@ let car1 = {
         element.stop();
     }
     else{
-        console.log(`${carname} 는 ${ph} 마력입니다.`)
+        console.log(`${carname} 는 ${ph} 마력입니다.`) // templete literal. TAB위의 ` 키 사용
         console.log(carname);
         element.start();
     }
