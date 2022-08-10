@@ -1,15 +1,20 @@
-import "./App.css";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AxiosTest from "./components/AxiosTest";
 import InputExample from "./components/InputExample";
-import ListComponent from "./components/ListComponent";
-import StyledComponent from "./components/StyledComponents";
+import StyledComponent from "./components/StyledComponent";
 import Welcome from "./components/Welcome";
 
 function App() {
   return (
-    <div className="App">
-      <h1>안녕하세요</h1>
-      <StyledComponent></StyledComponent>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Welcome />}></Route>
+        <Route path="/styleTest" element={<StyledComponent />}></Route>
+        <Route path="/inputTest" element={<InputExample />}></Route>
+        <Route path="/axiosTest" element={<AxiosTest />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
