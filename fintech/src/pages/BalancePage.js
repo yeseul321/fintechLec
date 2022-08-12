@@ -4,6 +4,7 @@ import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import BalanceCard from "../components/balance/BalanceCard";
+import TransactionList from "../components/balance/TransactionList";
 
 const BalancePage = () => {
   /**
@@ -12,13 +13,15 @@ const BalancePage = () => {
    * queryString Parsing 데이터를 가지고 오세요 (AuthResult)
    * 날짜는 그냥 고정값으로 오늘 날짜
    * axios option 통해서 데이터를 조회
-   * BalanceCard 렌더링
+   * BalanceCard 렌더링 해주세요 !
    */
   const { fintechUseNo } = queryString.parse(useLocation().search);
   const [balance, setBalance] = useState({});
+  const [transactionList, setTransactionList] = useState([]);
 
   useEffect(() => {
     getBalance();
+    getTransactionList();
   }, []);
 
   const genTransId = () => {
@@ -52,6 +55,30 @@ const BalancePage = () => {
   /**
    * #work6 거래내역 조회 api 활용해서 데이터 조회하기
    */
+  const getTransactionList = () => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    const option = {
+      method: "GET",
+      url: "/v2.0/account/transaction_list/fin_num",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        bank_tran_id: genTransId(),
+        fintech_use_num: fintechUseNo,
+        inquiry_type: "A",
+        inquiry_base: "D",
+        from_date: "20220101",
+        to_date: "20220101",
+        sort_order: "D",
+        tran_dtime: "20220630104700",
+      },
+    };
+    axios(option).then(({ data }) => {
+      setTransactionList(data.res_list);
+    });
+  };
 
   return (
     <div>
@@ -61,6 +88,7 @@ const BalancePage = () => {
         fintechNo={fintechUseNo}
         balance={balance.balance_amt}
       ></BalanceCard>
+      <TransactionList transactionList={transactionList}></TransactionList>
     </div>
   );
 };
